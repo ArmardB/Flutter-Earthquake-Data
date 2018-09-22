@@ -10,10 +10,9 @@ void main() async {
 
   Map _data = await _getEarthQuakeData();
   List _earthQuakeData = _data['features'];
+  var format = new DateFormat.yMMMMd("en_US").add_jm();
 
-  var format = new DateFormat('MMMM d, y h:mm a');
 
- print(_earthQuakeData[0]['properties']['time']);
 
   runApp(new MaterialApp(
     title: 'Earthquake Data',
@@ -31,18 +30,27 @@ void main() async {
             itemCount: _earthQuakeData.length,
             padding: EdgeInsets.all(2.5),
             itemBuilder: (BuildContext context, int position) {
+
+              if (position.isOdd) return new Divider(height: 5.5);
+              final index = position ~/ 2;
+              var date = format.format(new DateTime.fromMicrosecondsSinceEpoch(_earthQuakeData[index]['properties']['time'] * 1000, isUtc: true));
+
               return Column(
                 children: <Widget>[
-                  new Divider(height: 5.5),
                   new ListTile(
-                    title: new Text(format.format((_formatDate(_earthQuakeData[position]['properties']['time']))),
+                    title: new Text(date,
                     style: TextStyle(
                       color: Colors.redAccent,
                       fontWeight: FontWeight.bold,
                       fontSize: 15.4
                     ),
                     ),
-                    subtitle: Text(_earthQuakeData[position]['properties']['place']),
+                    subtitle: Text(_earthQuakeData[position]['properties']['place'],
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontStyle: FontStyle.italic
+
+                      ),),
                     leading: CircleAvatar(
                       backgroundColor: Colors.amberAccent.shade400,
                       child: Text("${_earthQuakeData[position]['properties']['mag']}",
@@ -90,6 +98,6 @@ void _getMoreInfo(BuildContext context, String details) {
 }
 
 DateTime _formatDate(int time) {
-  DateTime date = new DateTime.fromMillisecondsSinceEpoch(time * 1000);
+  DateTime date = new DateTime.fromMillisecondsSinceEpoch(time * 1000, isUtc: true);
   return date;
 }
