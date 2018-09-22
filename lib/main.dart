@@ -35,7 +35,13 @@ void main() async {
                 children: <Widget>[
                   new Divider(height: 5.5),
                   new ListTile(
-                    title: new Text(format.format((_formatDate(_earthQuakeData[position]['properties']['time'])))),
+                    title: new Text(format.format((_formatDate(_earthQuakeData[position]['properties']['time']))),
+                    style: TextStyle(
+                      color: Colors.redAccent,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15.4
+                    ),
+                    ),
                     subtitle: Text(_earthQuakeData[position]['properties']['place']),
                     leading: CircleAvatar(
                       backgroundColor: Colors.amberAccent.shade400,
